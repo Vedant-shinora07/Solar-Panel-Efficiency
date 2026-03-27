@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.pyc
+*.pkl
+solar_data.csv
+.idea/
+*.db
+secrets.h
+.env

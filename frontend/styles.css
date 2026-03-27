@@ -6,7 +6,7 @@
 /* ── CSS Custom Properties ── */
 :root {
   /* Color Palette */
-  --clr-primary:    #432323;
+  --clr-primary:    #000000;
   --clr-secondary:  #2F5755;
   --clr-accent:     #5A9690;
   --clr-bg:         #E0D9D9;
@@ -17,7 +17,7 @@
   --clr-warning:    #E8A838;
   --clr-success:    #48A868;
   --clr-card:       #FFFFFF;
-  --clr-sidebar:    #432323;
+  --clr-sidebar:    #000000;
   --clr-sidebar-active: #5A9690;
 
   /* Typography */

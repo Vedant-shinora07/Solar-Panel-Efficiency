@@ -1,183 +1,233 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Industrial Alchemist – System Overview</title>
-  <meta name="description" content="Industrial Alchemist IoT System Dashboard – Real-time monitoring of temperature, voltage, and current readings." />
-  <link rel="stylesheet" href="styles.css" />
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Industrial Alchemist – System Overview</title>
+        <meta
+            name="description"
+            content="Industrial Alchemist IoT System Dashboard – Real-time monitoring of temperature, voltage, and current readings."
+        />
+        <link rel="stylesheet" href="styles.css" />
+        <!-- Chart.js CDN -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    </head>
+    <body>
+        <!-- ── App Layout ── -->
+        <div class="app-layout">
+            <!-- Sidebar Toggle (mobile) -->
+            <button
+                class="sidebar-toggle"
+                id="sidebarToggle"
+                aria-label="Toggle sidebar"
+            >
+                ☰
+            </button>
+            <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<!-- ── App Layout ── -->
-<div class="app-layout">
+            <!-- ── Sidebar ── -->
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-brand">
+                    <h1>Industrial Alchemist</h1>
+                    <span>oT System v1.0</span>
+                </div>
+                <nav class="sidebar-nav">
+                    <a href="index.html" class="active" id="nav-dashboard">
+                        <span class="icon">⊞</span> Dashboard
+                    </a>
+                    <a href="ml.html" id="nav-ml">
+                        <span class="icon">⦿</span> ML Predictions
+                    </a>
+                    <a href="#" id="nav-settings">
+                        <span class="icon">⚙</span> Settings
+                    </a>
+                    <a href="#" id="nav-help">
+                        <span class="icon">❓</span> Help
+                    </a>
+                </nav>
+                <div class="sidebar-user">
+                    <div class="avatar">O1</div>
+                    <div class="user-info">
+                        <h4>Operator 01</h4>
+                        <span>Level A Access</span>
+                    </div>
+                </div>
+            </aside>
 
-  <!-- Sidebar Toggle (mobile) -->
-  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+            <!-- ── Main Content ── -->
+            <div class="main-content">
+                <!-- Header -->
+                <header class="top-header">
+                    <div class="header-left">
+                        <h2>System Overview</h2>
+                    </div>
+                    <div class="header-right">
+                        <div class="search-bar">
+                            <span class="search-icon">🔍</span>
+                            <input
+                                type="text"
+                                placeholder="Search parameters..."
+                                id="searchInput"
+                            />
+                        </div>
+                        <button
+                            class="header-icon-btn"
+                            aria-label="Notifications"
+                        >
+                            🔔 <span class="badge"></span>
+                        </button>
+                        <button
+                            class="header-profile"
+                            aria-label="User profile"
+                        >
+                            <span class="avatar">SY</span>
+                            <span>System Monitor</span>
+                        </button>
+                    </div>
+                </header>
 
-  <!-- ── Sidebar ── -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-brand">
-      <h1>Industrial Alchemist</h1>
-      <span>oT System v1.0</span>
-    </div>
-    <nav class="sidebar-nav">
-      <a href="index.html" class="active" id="nav-dashboard">
-        <span class="icon">⊞</span> Dashboard
-      </a>
-      <a href="ml.html" id="nav-ml">
-        <span class="icon">⦿</span> ML Predictions
-      </a>
-      <a href="#" id="nav-settings">
-        <span class="icon">⚙</span> Settings
-      </a>
-      <a href="#" id="nav-help">
-        <span class="icon">❓</span> Help
-      </a>
-    </nav>
-    <div class="sidebar-user">
-      <div class="avatar">O1</div>
-      <div class="user-info">
-        <h4>Operator 01</h4>
-        <span>Level A Access</span>
-      </div>
-    </div>
-  </aside>
+                <!-- Page Content -->
+                <main class="page-content">
+                    <!-- Dashboard Grid -->
+                    <div class="dashboard-grid">
+                        <!-- ─── Temperature Card ─── -->
+                        <div class="card temperature-card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <span class="card-icon">🌡</span>
+                                    Temperature Card
+                                </div>
+                                <div>
+                                    <span
+                                        class="status-badge normal"
+                                        id="tempStatus"
+                                    >
+                                        <span class="status-dot normal"></span>
+                                        Normal
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="temp-meta">
+                                Last 24h Variance: ±0.4°C
+                            </div>
+                            <div class="temp-value" id="tempValue">
+                                24.5 <span class="unit">°C</span>
+                            </div>
+                            <div class="temp-chart-wrap">
+                                <canvas id="tempChart"></canvas>
+                            </div>
+                        </div>
 
-  <!-- ── Main Content ── -->
-  <div class="main-content">
+                        <!-- ─── Voltage Card ─── -->
+                        <div class="card voltage-card">
+                            <div class="card-header">
+                                <div class="card-title">Voltage Card</div>
+                                <span
+                                    class="card-icon"
+                                    style="color: var(--clr-warning)"
+                                    >⚡</span
+                                >
+                            </div>
+                            <div class="voltage-gauge-row">
+                                <div class="gauge-circle">
+                                    <span class="gauge-val" id="gaugeVal"
+                                        >220</span
+                                    >
+                                    <span class="gauge-label">VOLTS</span>
+                                </div>
+                                <div class="voltage-info">
+                                    <div class="voltage-val" id="voltageVal">
+                                        220.1V
+                                    </div>
+                                    <div
+                                        class="voltage-status"
+                                        id="voltageStatus"
+                                    >
+                                        Safe Range
+                                    </div>
+                                    <div class="voltage-dots">
+                                        <span class="active"></span>
+                                        <span class="active"></span>
+                                        <span class="active"></span>
+                                        <span class="active"></span>
+                                        <span></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="threshold-bar">
+                                <span class="label">Threshold</span>
+                                <span class="value">210V – 240V</span>
+                            </div>
+                        </div>
 
-    <!-- Header -->
-    <header class="top-header">
-      <div class="header-left">
-        <h2>System Overview</h2>
-      </div>
-      <div class="header-right">
-        <div class="search-bar">
-          <span class="search-icon">🔍</span>
-          <input type="text" placeholder="Search parameters..." id="searchInput" />
-        </div>
-        <button class="header-icon-btn" aria-label="Notifications">
-          🔔 <span class="badge"></span>
-        </button>
-        <button class="header-profile" aria-label="User profile">
-          <span class="avatar">SY</span>
-          <span>System Monitor</span>
-        </button>
-      </div>
-    </header>
+                        <!-- ─── Current Card ─── -->
+                        <div class="card current-card">
+                            <div class="card-header">
+                                <div class="card-title">Current Card</div>
+                                <span
+                                    class="card-icon"
+                                    style="color: var(--clr-danger)"
+                                    >⚡</span
+                                >
+                            </div>
+                            <div class="current-value-row">
+                                <span class="current-val" id="currentVal"
+                                    >5.2</span
+                                >
+                                <span class="current-unit">Amps</span>
+                            </div>
+                            <div class="current-meta" id="currentMeta">
+                                Peak usage detected at 08:42 AM
+                            </div>
+                            <div class="current-bars" id="currentBars">
+                                <!-- JS generated -->
+                            </div>
+                            <div class="alert-strip warning" id="currentAlert">
+                                ⚠ Abnormal Spikes Prevented
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /dashboard-grid -->
 
-    <!-- Page Content -->
-    <main class="page-content">
+                    <!-- ─── Bottom Stats ─── -->
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <div class="stat-icon">🏗</div>
+                            <div>
+                                <div class="stat-label">Nodes Active</div>
+                                <div class="stat-value" id="nodesActive">
+                                    128/130
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">💡</div>
+                            <div>
+                                <div class="stat-label">Light Intensity</div>
+                                <div class="stat-value" id="signalStrength">
+                                    -- lux
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⏱</div>
+                            <div>
+                                <div class="stat-label">System Uptime</div>
+                                <div class="stat-value" id="systemUptime">
+                                    14d 2h
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
 
-      <!-- Dashboard Grid -->
-      <div class="dashboard-grid">
-
-        <!-- ─── Temperature Card ─── -->
-        <div class="card temperature-card">
-          <div class="card-header">
-            <div class="card-title">
-              <span class="card-icon">🌡</span> Temperature Card
+                <!-- FAB -->
+                <button class="fab" aria-label="Quick action">+</button>
             </div>
-            <div>
-              <span class="status-badge normal" id="tempStatus">
-                <span class="status-dot normal"></span> Normal
-              </span>
-            </div>
-          </div>
-          <div class="temp-meta">Last 24h Variance: ±0.4°C</div>
-          <div class="temp-value" id="tempValue">24.5 <span class="unit">°C</span></div>
-          <div class="temp-chart-wrap">
-            <canvas id="tempChart"></canvas>
-          </div>
+            <!-- /main-content -->
         </div>
+        <!-- /app-layout -->
 
-        <!-- ─── Voltage Card ─── -->
-        <div class="card voltage-card">
-          <div class="card-header">
-            <div class="card-title">Voltage Card</div>
-            <span class="card-icon" style="color:var(--clr-warning)">⚡</span>
-          </div>
-          <div class="voltage-gauge-row">
-            <div class="gauge-circle">
-              <span class="gauge-val" id="gaugeVal">220</span>
-              <span class="gauge-label">VOLTS</span>
-            </div>
-            <div class="voltage-info">
-              <div class="voltage-val" id="voltageVal">220.1V</div>
-              <div class="voltage-status" id="voltageStatus">Safe Range</div>
-              <div class="voltage-dots">
-                <span class="active"></span>
-                <span class="active"></span>
-                <span class="active"></span>
-                <span class="active"></span>
-                <span></span>
-              </div>
-            </div>
-          </div>
-          <div class="threshold-bar">
-            <span class="label">Threshold</span>
-            <span class="value">210V – 240V</span>
-          </div>
-        </div>
-
-        <!-- ─── Current Card ─── -->
-        <div class="card current-card">
-          <div class="card-header">
-            <div class="card-title">Current Card</div>
-            <span class="card-icon" style="color:var(--clr-danger)">⚡</span>
-          </div>
-          <div class="current-value-row">
-            <span class="current-val" id="currentVal">5.2</span>
-            <span class="current-unit">Amps</span>
-          </div>
-          <div class="current-meta" id="currentMeta">Peak usage detected at 08:42 AM</div>
-          <div class="current-bars" id="currentBars">
-            <!-- JS generated -->
-          </div>
-          <div class="alert-strip warning" id="currentAlert">
-            ⚠ Abnormal Spikes Prevented
-          </div>
-        </div>
-
-      </div> <!-- /dashboard-grid -->
-
-      <!-- ─── Bottom Stats ─── -->
-      <div class="stats-row">
-        <div class="stat-card">
-          <div class="stat-icon">🏗</div>
-          <div>
-            <div class="stat-label">Nodes Active</div>
-            <div class="stat-value" id="nodesActive">128/130</div>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">📡</div>
-          <div>
-            <div class="stat-label">Signal Strength</div>
-            <div class="stat-value" id="signalStrength">-42 dBm</div>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">⏱</div>
-          <div>
-            <div class="stat-label">System Uptime</div>
-            <div class="stat-value" id="systemUptime">14d 2h</div>
-          </div>
-        </div>
-      </div>
-
-    </main>
-
-    <!-- FAB -->
-    <button class="fab" aria-label="Quick action">+</button>
-
-  </div> <!-- /main-content -->
-</div> <!-- /app-layout -->
-
-<script src="script.js"></script>
-</body>
+        <script src="script.js"></script>
+    </body>
 </html>

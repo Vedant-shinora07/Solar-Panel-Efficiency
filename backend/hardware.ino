@@ -1,28 +1,8 @@
-#include <WiFi.h>
-#include <HTTPClient.h>
-#include <ArduinoJson.h>
-#include <OneWire.h>
-#include <DallasTemperature.h>
-
-// ─── WiFi & Server ───────────────────────────────────────────
-const char* SSID     = "YOUR_SSID";
-const char* PASSWORD = "YOUR_PASSWORD";
-const char* SERVER   = "http://192.168.1.100:5000/api/readings";  // your PC's local IP
-
-// ─── GPIO Pin Map ────────────────────────────────────────────
-#define ZMPT101B_PIN  34   // Voltage sensor  → D34
-#define ACS712_PIN    35   // Current sensor  → D35
-#define LDR_PIN       32   // Light sensor    → D32
-#define DS18B20_PIN    4   // Temp sensor     → D4
+#include "hardware.h"
 
 // ─── DS18B20 Setup ───────────────────────────────────────────
 OneWire oneWire(DS18B20_PIN);
 DallasTemperature tempSensor(&oneWire);
-
-// ─── Calibration Constants ───────────────────────────────────
-const float ACS712_SENSITIVITY = 1.215;  // change to 0.185 (5A) or 0.100 (20A) if needed
-const float ACS712_OFFSET      = 1.65;
-const float ZMPT_MULTIPLIER    = 3.3;  // adjust this after calibration
 
 // ─── Sensor Read Functions ───────────────────────────────────
 
@@ -34,7 +14,6 @@ float readVoltage() {
   }
   float avgRaw     = sum / 100.0;
   float adcVoltage = (avgRaw / 4095.0) * 3.3;
-  // return adcVoltage * ZMPT_MULTIPLIER;
   return adcVoltage;
 }
 
@@ -51,8 +30,7 @@ float readCurrent() {
 }
 
 float readLight() {
-  int raw = analogRead(LDR_PIN);
-  return raw;
+  return analogRead(LDR_PIN);
 }
 
 float readTemperature() {
@@ -66,8 +44,8 @@ float readTemperature() {
 
 // ─── WiFi Connect ────────────────────────────────────────────
 void connectWiFi() {
-  Serial.printf("[INFO] Connecting to: %s\n", SSID);
-  WiFi.begin(SSID, PASSWORD);
+  Serial.printf("[INFO] Connecting to: %s\n", WIFI_SSID);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
   int attempts = 0;
   while (WiFi.status() != WL_CONNECTED) {
@@ -79,9 +57,9 @@ void connectWiFi() {
       Serial.printf("\n[INFO] Still trying... (%d seconds elapsed)\n", attempts / 2);
     }
 
-    if (attempts >= 40) {
+    if (attempts >= WIFI_MAX_ATTEMPTS) {
       Serial.println("\n[ERR] Could not connect to WiFi. Check SSID and password.");
-      Serial.printf("[ERR] SSID entered: '%s'\n", SSID);
+      Serial.printf("[ERR] SSID entered: '%s'\n", WIFI_SSID);
       Serial.println("[ERR] Restarting ESP32 in 3 seconds...");
       delay(3000);
       ESP.restart();
@@ -98,7 +76,7 @@ void sendData(float voltage, float current, float temp, float light) {
   }
 
   HTTPClient http;
-  http.begin(SERVER);
+  http.begin(SERVER_URL);
   http.addHeader("Content-Type", "application/json");
 
   StaticJsonDocument<256> doc;
@@ -127,7 +105,7 @@ void setup() {
   tempSensor.begin();
 
   Serial.println("============================");
-  Serial.println("   Solar Monitor - Debug    ");
+  Serial.println("   Solar Monitor            ");
   Serial.println("============================");
   Serial.printf("DS18B20 devices found: %d\n", tempSensor.getDeviceCount());
   Serial.println("Starting readings...\n");
@@ -137,12 +115,10 @@ void setup() {
 
 // ─── Main Loop ───────────────────────────────────────────────
 void loop() {
-  // Raw ADC values
   int rawVoltage = analogRead(ZMPT101B_PIN);
   int rawCurrent = analogRead(ACS712_PIN);
   int rawLight   = analogRead(LDR_PIN);
 
-  // Processed values
   float voltage = readVoltage();
   float current = readCurrent();
   float temp    = readTemperature();
@@ -166,5 +142,5 @@ void loop() {
     sendData(voltage, current, temp, light);
   }
 
-  delay(2000);  // read every 2 seconds
+  delay(READ_INTERVAL_MS);
 }

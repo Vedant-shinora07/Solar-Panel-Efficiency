@@ -1,7 +1,7 @@
 CREATE DATABASE if not exists solar_monitor;
 USE solar_monitor;
 
-CREATE TABLE sensor_readings (
+CREATE TABLE if not exists sensor_readings (
   id          INT AUTO_INCREMENT PRIMARY KEY,
   voltage     FLOAT NOT NULL,
   current     FLOAT NOT NULL,
@@ -11,8 +11,7 @@ CREATE TABLE sensor_readings (
   timestamp   DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Optionally store AI predictions separately
-CREATE TABLE efficiency_predictions (
+CREATE TABLE if not exists efficiency_predictions (
   id              INT AUTO_INCREMENT PRIMARY KEY,
   reading_id      INT,
   efficiency_pct  FLOAT,

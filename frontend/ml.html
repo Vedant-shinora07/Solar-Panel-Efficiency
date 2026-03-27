@@ -1,196 +1,172 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Industrial Alchemist – ML Predictions</title>
-        <meta
-            name="description"
-            content="Machine Learning Predictions – Predictive maintenance and anomaly detection for Industrial Alchemist IoT System."
-        />
-        <link rel="stylesheet" href="styles.css" />
-        <!-- Chart.js CDN -->
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-    </head>
-    <body>
-        <div class="app-layout">
-            <!-- Sidebar Toggle (mobile) -->
-            <button
-                class="sidebar-toggle"
-                id="sidebarToggle"
-                aria-label="Toggle sidebar"
-            >
-                ☰
-            </button>
-            <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-            <!-- ── Sidebar ── -->
-            <aside class="sidebar" id="sidebar">
-                <div class="sidebar-brand">
-                    <h1>Industrial Alchemist</h1>
-                    <span>oT System v1.0</span>
-                </div>
-                <nav class="sidebar-nav">
-                    <a href="index.html" id="nav-dashboard">
-                        <span class="icon">⊞</span> Dashboard
-                    </a>
-                    <a href="ml.html" class="active" id="nav-ml">
-                        <span class="icon">⦿</span> ML Predictions
-                    </a>
-                    <a href="#" id="nav-settings">
-                        <span class="icon">⚙</span> Settings
-                    </a>
-                </nav>
-            </aside>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Industrial Alchemist – ML Predictions</title>
+    <meta name="description"
+        content="Machine Learning Predictions – Predictive maintenance and anomaly detection for Industrial Alchemist IoT System." />
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
 
-            <!-- ── Main Content ── -->
-            <div class="main-content">
-                <!-- Header -->
-                <header class="top-header">
-                    <div class="header-left">
-                        <h2>ML Predictions</h2>
-                        <div class="time-tabs">
-                            <button class="active" data-range="24h">
-                                Last 24h
-                            </button>
-                            <button data-range="7d">Last 7 Days</button>
-                            <button data-range="next24h">
-                                Next 24h Predictions
-                            </button>
-                        </div>
-                    </div>
-                    <div class="header-right">
-                        <button
-                            class="header-icon-btn"
-                            aria-label="Notifications"
-                        >
-                            🔔 <span class="badge"></span>
-                        </button>
-                        <button
-                            class="header-icon-btn"
-                            aria-label="User profile"
-                            style="font-size: 1.4rem"
-                        >
-                            👤
-                        </button>
-                    </div>
-                </header>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar Toggle (mobile) -->
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+            ☰
+        </button>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-                <!-- Page Content -->
-                <main class="page-content">
-                    <!-- ─── ML Hero Section ─── -->
-                    <div class="ml-hero">
-                        <!-- Prediction Banner -->
-                        <div class="prediction-banner">
-                            <div class="risk-badge">
-                                <span class="dot"></span> High Risk Detected
-                            </div>
-                            <h2>
-                                Predicted Failure<br />in
-                                <span class="highlight">48h</span>
-                            </h2>
-                            <p>
-                                Anomalous vibration patterns detected in Turbine
-                                Sector 7-B. Immediate maintenance is recommended
-                                to prevent cascading thermal overload.
-                            </p>
-                            <div class="prediction-actions">
-                                <button
-                                    class="btn btn-outline"
-                                    id="btnSchedule"
-                                >
-                                    Schedule Inspection
-                                </button>
-                                <button class="btn btn-filled" id="btnViewLog">
-                                    View Log Details
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Confidence Card -->
-                        <div class="card confidence-card">
-                            <div class="donut-wrap">
-                                <canvas id="confidenceChart"></canvas>
-                                <div class="donut-center">
-                                    <span class="pct" id="confidencePct"
-                                        >94%</span
-                                    >
-                                    <span class="pct-label">Confidence</span>
-                                </div>
-                            </div>
-                            <h3>High Precision Model</h3>
-                            <p>
-                                Based on 1.2M historical data points and current
-                                thermal drift.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- ─── Predicted vs Actual ─── -->
-                    <div class="card comparison-card">
-                        <div class="comparison-header">
-                            <div>
-                                <h3>Predicted vs Actual Performance</h3>
-                                <div class="subtitle">
-                                    Metric: Vibration Velocity (mm/s) ·
-                                    Industrial standard tolerance range
-                                </div>
-                            </div>
-                            <div class="legend">
-                                <div class="legend-item">
-                                    <span class="legend-dot predicted"></span>
-                                    Predicted
-                                </div>
-                                <div class="legend-item">
-                                    <span class="legend-dot actual"></span>
-                                    Actual
-                                </div>
-                            </div>
-                        </div>
-                        <div class="comparison-chart-wrap">
-                            <canvas id="comparisonChart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- ─── ML Metrics Row ─── -->
-                    <div class="ml-metrics-row">
-                        <div class="ml-metric-card">
-                            <div class="metric-icon drift">🌡</div>
-                            <div>
-                                <div class="metric-label">Drift Direction</div>
-                                <h4>+12.4% Thermal Rise</h4>
-                                <div class="metric-desc">
-                                    Increasing steadily over last 6h.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ml-metric-card">
-                            <div class="metric-icon model">🔄</div>
-                            <div>
-                                <div class="metric-label">Model Version</div>
-                                <h4>Vesta v2.4-Gold</h4>
-                                <div class="metric-desc">
-                                    Optimized for Turbine Sector 7-B.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ml-metric-card">
-                            <div class="metric-icon alert">⚠</div>
-                            <div>
-                                <div class="metric-label">Alert Threshold</div>
-                                <h4>Critical Exceedance</h4>
-                                <div class="metric-desc">
-                                    98% probability of threshold breach.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </main>
+        <!-- ── Sidebar ── -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <h1>Industrial Alchemist</h1>
+                <span>oT System v1.0</span>
             </div>
-            <!-- /main-content -->
-        </div>
-        <!-- /app-layout -->
+            <nav class="sidebar-nav">
+                <a href="index.html" id="nav-dashboard">
+                    <span class="icon">⊞</span> Dashboard
+                </a>
+                <a href="ml.html" class="active" id="nav-ml">
+                    <span class="icon">⦿</span> ML Predictions
+                </a>
 
-        <script src="script.js"></script>
-    </body>
+            </nav>
+        </aside>
+
+        <!-- ── Main Content ── -->
+        <div class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <h2>ML Predictions</h2>
+                    <div class="time-tabs">
+                        <button class="active" data-range="24h">
+                            Last 24h
+                        </button>
+                        <button data-range="7d">Last 7 Days</button>
+                        <button data-range="next24h">
+                            Next 24h Predictions
+                        </button>
+                    </div>
+                </div>
+
+            </header>
+
+            <!-- Page Content -->
+            <main class="page-content">
+                <!-- ─── ML Hero Section ─── -->
+                <div class="ml-hero">
+                    <!-- Prediction Banner -->
+                    <div class="prediction-banner">
+                        <div class="risk-badge">
+                            <span class="dot"></span> High Risk Detected
+                        </div>
+                        <h2>
+                            Predicted Failure<br />in
+                            <span class="highlight">48h</span>
+                        </h2>
+                        <p>
+                            Anomalous vibration patterns detected in Turbine
+                            Sector 7-B. Immediate maintenance is recommended
+                            to prevent cascading thermal overload.
+                        </p>
+                        <div class="prediction-actions">
+                            <button class="btn btn-outline" id="btnSchedule">
+                                Schedule Inspection
+                            </button>
+                            <button class="btn btn-filled" id="btnViewLog">
+                                View Log Details
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Confidence Card -->
+                    <div class="card confidence-card">
+                        <div class="donut-wrap">
+                            <canvas id="confidenceChart"></canvas>
+                            <div class="donut-center">
+                                <span class="pct" id="confidencePct">94%</span>
+                                <span class="pct-label">Confidence</span>
+                            </div>
+                        </div>
+                        <h3>High Precision Model</h3>
+                        <p>
+                            Based on 1.2M historical data points and current
+                            thermal drift.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- ─── Predicted vs Actual ─── -->
+                <div class="card comparison-card">
+                    <div class="comparison-header">
+                        <div>
+                            <h3>Predicted vs Actual Performance</h3>
+                            <div class="subtitle">
+                                Metric: Vibration Velocity (mm/s) ·
+                                Industrial standard tolerance range
+                            </div>
+                        </div>
+                        <div class="legend">
+                            <div class="legend-item">
+                                <span class="legend-dot predicted"></span>
+                                Predicted
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-dot actual"></span>
+                                Actual
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comparison-chart-wrap">
+                        <canvas id="comparisonChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- ─── ML Metrics Row ─── -->
+                <div class="ml-metrics-row">
+                    <div class="ml-metric-card">
+                        <div class="metric-icon drift">🌡</div>
+                        <div>
+                            <div class="metric-label">Drift Direction</div>
+                            <h4>+12.4% Thermal Rise</h4>
+                            <div class="metric-desc">
+                                Increasing steadily over last 6h.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ml-metric-card">
+                        <div class="metric-icon model">🔄</div>
+                        <div>
+                            <div class="metric-label">Model Version</div>
+                            <h4>Vesta v2.4-Gold</h4>
+                            <div class="metric-desc">
+                                Optimized for Turbine Sector 7-B.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ml-metric-card">
+                        <div class="metric-icon alert">⚠</div>
+                        <div>
+                            <div class="metric-label">Alert Threshold</div>
+                            <h4>Critical Exceedance</h4>
+                            <div class="metric-desc">
+                                98% probability of threshold breach.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <!-- /main-content -->
+    </div>
+    <!-- /app-layout -->
+
+    <script src="script.js"></script>
+</body>
+
 </html>
